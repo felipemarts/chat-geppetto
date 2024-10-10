@@ -11,11 +11,14 @@ function cloneChat() {
 }
 
 function deleteChat() {
-  callCommand("delete", currentChatId).then(() => {
-    localStorage.removeItem('currentChatId');
-    localStorage.removeItem('chatData');
-    window.location.reload();
-  })
+  const userConfirmed = confirm('Are you sure you want to delete this chat?');
+  if (userConfirmed) {
+    callCommand("delete", currentChatId).then(() => {
+      localStorage.removeItem('currentChatId');
+      localStorage.removeItem('chatData');
+      window.location.reload();
+    });
+  }
 }
 
 function renameChat() {
