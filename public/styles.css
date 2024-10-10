@@ -1,0 +1,284 @@
+/* Ensure full-height usage for body and html */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+/* Main container should take full height */
+.container-fluid {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Chat window flex settings */
+.chat-window {
+  overflow-y: auto; /* Enable scrollbar for long messages */
+  flex-grow: 1;
+  max-height: calc(100vh);
+  border-radius: 5px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+}
+
+.prompt {
+  border-top-left-radius: 10px !important;
+  border-bottom-left-radius: 10px !important;
+}
+
+/* Customize scrollbar in the chat window */
+.chat-window::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chat-window::-webkit-scrollbar-thumb {
+  background-color: #343a40;
+  border-radius: 10px;
+}
+
+.chat-window::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* Style the chat list items */
+.list-group-item {
+  border: none;
+}
+
+.list-group-item:hover {
+  background-color: #495057;
+}
+
+/* Styling for user message bubble */
+.user-message-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.user-message .user-message-mark {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.user-message-mark::-webkit-scrollbar {
+  width: 8px;
+}
+
+.user-message-mark::-webkit-scrollbar-thumb {
+  background-color: #343a40;
+  border-radius: 10px;
+}
+
+.user-message-mark::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.hljs::-webkit-scrollbar {
+  width: 8px;
+}
+
+.hljs::-webkit-scrollbar-thumb {
+  background-color: #343a40;
+  border-radius: 10px;
+}
+
+.hljs::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.user-message {
+  background-color: #1a2243;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 90%;
+  word-wrap: break-word;
+}
+
+/* Styling for bot message bubble */
+.bot-message-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+
+.bot-message {
+  background-color: #2e3032;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 90%;
+  word-wrap: break-word;
+}
+
+/* Style the "Copy" button */
+.copy-btn {
+  background-color: #343a40;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.list-group-item.active {
+  background-color: #0d86ff;
+  font-weight: bold;
+}
+
+/* Style for a discreet "Delete" button */
+.chat-small-btn {
+  background-color: transparent;
+  color: #ced4da;
+  border: none;
+  margin-left: 10px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.delete-btn:hover {
+  opacity: 1;
+  color: #f8d7da;
+}
+
+/* General style for Markdown content */
+.markdown-content {
+  color: #d1d5db;
+  background-color: #1f2937;
+  padding: 1rem;
+  border-radius: 5px;
+}
+
+/* Headers */
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4,
+.markdown-content h5,
+.markdown-content h6 {
+  color: #f9fafb;
+}
+
+/* Links */
+.markdown-content a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.markdown-content a:hover {
+  text-decoration: underline;
+}
+
+/* Bold and italic text */
+.markdown-content strong {
+  font-weight: bold;
+  color: #f3f4f6;
+}
+
+.markdown-content em {
+  font-style: italic;
+  color: #e5e7eb;
+}
+
+/* Lists */
+.markdown-content ul,
+.markdown-content ol {
+  padding-left: 2rem;
+}
+
+.markdown-content li {
+  margin-bottom: 0.5rem;
+}
+
+/* Inline code */
+.markdown-content code {
+  background-color: #374151;
+  color: #f3f4f6;
+  padding: 0.25rem;
+  border-radius: 4px;
+}
+
+/* Code blocks */
+.markdown-content pre {
+  background-color: #1f2937;
+  padding: 1rem;
+  overflow-x: auto;
+  border-radius: 5px;
+}
+
+.selected-chat {
+  background-color: #343a40;
+  color: #f3f4f6;
+}
+
+.selected-chat:hover {
+  background-color: #f3f4f6;
+  color: #343a40;
+}
+
+#scrollToBottom {
+  position: absolute;
+  bottom: 90px;
+  right: 20px;
+  z-index: 10;
+  display: none;
+  background-color: #0d6efd;
+  opacity: 0.5;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  font-size: 16px;
+}
+
+#scrollToBottom:hover {
+  background-color: #0056b3;
+  opacity: 0.8;
+}
+
+.files-container {
+  padding: 10px;
+  border-radius: 5px;
+  max-height: 100vh;
+  overflow-y: auto;
+}
+
+.file-item {
+  word-break: break-all;
+  display: flex;
+  align-items: center;
+  margin: 10px 0px;
+  padding: 0px;
+  border-width: 1px;
+  border: #FFF;
+  border-radius: 10px;
+  border-style: solid;
+  color: #FFF;
+}
+
+.file-item:hover {
+  background-color: #FFF;
+  color: #000;
+}
+
+.file-check {
+  padding: 5px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.file-name {
+  word-break: break-all;
+  padding: 5px 10px;
+  width: 100%;
+  cursor: pointer;
+}
