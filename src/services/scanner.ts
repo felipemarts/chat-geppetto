@@ -1,4 +1,3 @@
-
 import fs from 'fs';
 import path from 'path';
 import { Action } from '../types';
@@ -31,6 +30,11 @@ function getIgnoredPatterns(dir: string): string[] {
 function isIgnored(item: string, ignoredPatterns: string[], dir: string): boolean {
     const relativePath = path.relative(dir, item);
     const itemName = path.basename(relativePath);
+
+    // Check if the item is the .geppetto directory
+    if (itemName === '.geppetto') {
+        return false; // Always include .geppetto
+    }
 
     // Implicitly ignore hidden files and directories
     if (itemName.startsWith('.')) {
