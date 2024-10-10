@@ -2,7 +2,7 @@
 
 Chat Geppetto is a sophisticated chat application designed to assist users in coding complex software problems, providing guidance, and facilitating implementation using languages such as Node.js, TypeScript, Blockchain, GoLang, and more. This project is built with Express for the backend and a visually appealing frontend using HTML, CSS, and JavaScript.
 
-[Chat Geppetto](https://www.youtube.com/watch?v=2Fo9ZrUxj94)
+[Watch on YouTube Chat Geppetto](https://www.youtube.com/watch?v=2Fo9ZrUxj94)
 
 ## Table of Contents
 
