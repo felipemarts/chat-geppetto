@@ -282,3 +282,13 @@ html, body {
   width: 100%;
   cursor: pointer;
 }
+
+#clearAll:hover {
+  background-color: red;
+  color: white; /* Para garantir que o texto fique legível */
+}
+
+#deleteChat:hover {
+  background-color: red;
+  color: white; /* Para garantir que o texto fique legível */
+}

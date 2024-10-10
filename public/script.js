@@ -3,6 +3,10 @@
 let currentChatId = localStorage.getItem('currentChatId');
 let chatData = localStorage.getItem('chatData') ? JSON.parse(localStorage.getItem('chatData')) : null;
 
+function pathsProject() {
+  callCommand("projectFiles", "").then(() => loadChatList())
+}
+
 function cloneChat() {
   const chatName = prompt('Enter chat name:');
   if (chatName) {

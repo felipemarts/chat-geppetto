@@ -1,7 +1,7 @@
 
 // Interface for a chat message, defining role and content
 export interface Message {
-    role: 'user' | 'assistant';
+    role: 'user' | 'assistant' | 'system';
     content: string;
 }
 

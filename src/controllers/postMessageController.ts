@@ -1,9 +1,9 @@
 
-import { getFileMessage, loadChatHistory, saveChatHistory } from './historyController';
 import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
 import { Message } from '../types';
+import helper from '../helper';
 
 // Controller to post a message to a chat
 export async function postMessage(req: any, res: any): Promise<any> {
@@ -15,14 +15,17 @@ export async function postMessage(req: any, res: any): Promise<any> {
         return res.status(400).json({ error: 'Empty message' });
     }
 
-    const chatData = loadChatHistory(chatId);
-    saveChatHistory(chatId, [...chatData.history, { role: 'user', content: message }]);
+    const chatData = helper.getChat(chatId);
+    helper.saveChat({
+        ...chatData,
+        history: [...chatData.history, { role: 'user', content: message }]
+    });
 
     if (!shouldSend) {
         return res.json({ botResponse: '' });
     }
 
-    const sendMessages = [];
+    const sendMessages: Message[] = [];
 
     const newMessage: Message = { role: 'user', content: message };
 
@@ -37,14 +40,17 @@ export async function postMessage(req: any, res: any): Promise<any> {
 
 
     for (const filePath of files) {
-        const fileMessage = getFileMessage(chatId, filePath);
-        sendMessages.push(fileMessage);
+        const formattedContent = helper.getProjectFile(chatId, filePath);
+        sendMessages.push({
+            role: 'user',
+            content: formattedContent
+        });
     }
     sendMessages.push(...chatData.history);
 
     sendMessages.push(newMessage);
     chatData.history.push(newMessage);
-    saveChatHistory(chatId, chatData.history);
+    helper.saveChat(chatData);
 
     try {
         const apiKey = process.env.OPENAI_API_KEY;
@@ -64,7 +70,7 @@ export async function postMessage(req: any, res: any): Promise<any> {
 
         const botResponse = response.data.choices[0].message.content;
         chatData.history.push({ role: 'assistant', content: botResponse });
-        saveChatHistory(chatId, chatData.history);
+        helper.saveChat(chatData);
         return res.json({ botResponse });
     } catch (error) {
         console.error('Error communicating with the OpenAI API:', error);

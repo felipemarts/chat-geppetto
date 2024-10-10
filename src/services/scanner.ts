@@ -71,7 +71,7 @@ function listFilesRecursively(dir: string, ignoredPatterns: string[]): string[] 
 }
 
 // Populate files with all non-ignored files from the project
-export function populateFiles(id: string, projectName: string, projectPath: string): Action[] {
+export function populateFiles(projectPath: string): Action[] {
     const files: Action[] = [];
     const ignoredPatterns = getIgnoredPatterns(projectPath);
     const allFiles = listFilesRecursively(projectPath, ignoredPatterns);
@@ -87,4 +87,40 @@ export function populateFiles(id: string, projectName: string, projectPath: stri
     files.sort((a, b) => a.name.localeCompare(b.name));
 
     return files;
+}
+
+// Function to generate Markdown tree
+export function generateMarkdownTree(dir: string): string {
+    const ignoredPatterns = getIgnoredPatterns(dir);
+    const markdownLines: string[] = [];
+    generateTree(dir, '', ignoredPatterns, markdownLines);
+    return `\`\`\`md\n${markdownLines.join('\n')}\n\`\`\``;
+}
+
+// Helper function to generate file tree and append to markdownLines
+function generateTree(dir: string, prefix: string, ignoredPatterns: string[], markdownLines: string[]) {
+    const items = fs.readdirSync(dir);
+
+    items.forEach((item, index) => {
+        const filePath = path.join(dir, item);
+        
+        // Ignore files based on patterns
+        if (isIgnored(filePath, ignoredPatterns, dir)) {
+            return;
+        }
+        
+        const isLast = index === items.length - 1;
+        const isDir = fs.statSync(filePath).isDirectory();
+
+        // Create the tree structure like "|-- filename"
+        const prefixSymbol = isLast ? '└── ' : '├── ';
+        const childPrefix = isLast ? '    ' : '│   ';
+
+        markdownLines.push(`${prefix}${prefixSymbol}${item}`);
+
+        // If directory, recursively add its content
+        if (isDir) {
+            generateTree(filePath, prefix + childPrefix, ignoredPatterns, markdownLines);
+        }
+    });
 }
