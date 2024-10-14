@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import helper from '../helper';
-import { generateMarkdownTree } from './scanner';
+import { generateFileList } from './scanner';
 
 interface FileOperation {
     id: string;
@@ -46,7 +46,7 @@ const projectFiles = async (operation: FileOperation) => {
         throw new Error("Project path not configured");
     }
 
-    const markdownContent = generateMarkdownTree(chatData.path);
+    const markdownContent = generateFileList(chatData.path);
     helper.saveProjectFile(operation.id, `.geppetto/structure.md`, markdownContent);
 }
 

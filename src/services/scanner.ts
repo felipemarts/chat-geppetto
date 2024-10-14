@@ -93,38 +93,35 @@ export function populateFiles(projectPath: string): Action[] {
     return files;
 }
 
-// Function to generate Markdown tree
-export function generateMarkdownTree(dir: string): string {
+// Function to generate a simple list of file paths
+export function generateFileList(dir: string): string {
     const ignoredPatterns = getIgnoredPatterns(dir);
-    const markdownLines: string[] = [];
-    generateTree(dir, '', ignoredPatterns, markdownLines);
-    return `\`\`\`md\n${markdownLines.join('\n')}\n\`\`\``;
+    const filePaths: string[] = [];
+
+    listFilePaths(dir, ignoredPatterns, filePaths, dir);
+
+    return filePaths.join('\n');
 }
 
-// Helper function to generate file tree and append to markdownLines
-function generateTree(dir: string, prefix: string, ignoredPatterns: string[], markdownLines: string[]) {
-    const items = fs.readdirSync(dir);
+// Helper function to recursively collect file paths
+function listFilePaths(currentDir: string, ignoredPatterns: string[], filePaths: string[], rootDir: string) {
+    const items = fs.readdirSync(currentDir);
 
-    items.forEach((item, index) => {
-        const filePath = path.join(dir, item);
-        
+    items.forEach(item => {
+        const filePath = path.join(currentDir, item);
+
         // Ignore files based on patterns
-        if (isIgnored(filePath, ignoredPatterns, dir)) {
+        if (isIgnored(filePath, ignoredPatterns, rootDir)) {
             return;
         }
-        
-        const isLast = index === items.length - 1;
-        const isDir = fs.statSync(filePath).isDirectory();
 
-        // Create the tree structure like "|-- filename"
-        const prefixSymbol = isLast ? '└── ' : '├── ';
-        const childPrefix = isLast ? '    ' : '│   ';
+        const stat = fs.statSync(filePath);
 
-        markdownLines.push(`${prefix}${prefixSymbol}${item}`);
-
-        // If directory, recursively add its content
-        if (isDir) {
-            generateTree(filePath, prefix + childPrefix, ignoredPatterns, markdownLines);
+        // Add file path to list if it's a file
+        if (!stat.isDirectory()) {
+            filePaths.push(path.relative(rootDir, filePath));
+        } else {
+            listFilePaths(filePath, ignoredPatterns, filePaths, rootDir);
         }
     });
 }

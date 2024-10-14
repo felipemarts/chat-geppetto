@@ -3,8 +3,42 @@
 let currentChatId = localStorage.getItem('currentChatId');
 let chatData = localStorage.getItem('chatData') ? JSON.parse(localStorage.getItem('chatData')) : null;
 
+
+async function deployCommand(deployButton, content) {
+  try {
+    console.log(content)
+    const commandJson = JSON.parse(content);
+
+    if (commandJson.cmd === "read") {
+      let response = await fetch(`/history/${currentChatId}/file/${encodeURIComponent(commandJson.path)}`);
+      if (!response.ok) {
+        throw new Error('File could not be retrieved');
+      }
+      const { message } = await response.json();
+
+      const userInput = document.getElementById('chat-input');
+      const currentText = userInput.value;
+      userInput.value = message.content;
+      sendMessage(true);
+      userInput.value = currentText;
+
+    } else if(commandJson.cmd === "write") {
+      const deployText = `//${commandJson.path}\n${commandJson.content}`;
+
+      callCommand("deploy", deployText).then(msg => {
+        deployButton.textContent = msg;
+        setTimeout(() => { deployButton.textContent = 'Deploy'; }, 2000);
+      });
+    }
+  } catch (err) {
+    alert(`Error: ${err.message}`);
+  }
+}
+
 function pathsProject() {
-  callCommand("projectFiles", "").then(() => loadChatList())
+  callCommand("projectFiles", currentChatId).then(() => {
+    window.location.reload();
+  });
 }
 
 function cloneChat() {
@@ -298,7 +332,7 @@ async function registerAll() {
 async function sendMessage(shouldSend) {
   const userInput = document.getElementById('chat-input');
   const message = userInput.value;
-  if (!message || !currentChatId) return;
+  if (!currentChatId) return;
 
   displayMessage(chatData.history.length, message, 'user');
   chatData.history.push({
@@ -463,10 +497,7 @@ function displayMessage(index, message, role, roll = true) {
 
     deployButton.addEventListener('click', () => {
       const codeText = block.innerText;
-      callCommand("deploy", codeText).then(msg => {
-        deployButton.textContent = msg;
-        setTimeout(() => { deployButton.textContent = 'Deploy'; }, 2000);
-      });
+      deployCommand(deployButton, codeText);
     });
 
     copyButton.addEventListener('click', () => {
