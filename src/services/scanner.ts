@@ -78,16 +78,16 @@ function listFilesRecursively(dir: string, ignoredPatterns: string[]): string[] 
 export function populateFiles(projectPath: string): Action[] {
     const files: Action[] = [];
     const ignoredPatterns = getIgnoredPatterns(projectPath);
-    const allFiles = listFilesRecursively(projectPath, ignoredPatterns);
-  
-    allFiles.forEach(completePath => {
+
+    const filePaths: string[] = [];
+
+    listFilePaths(projectPath, ignoredPatterns, filePaths, projectPath);
+    filePaths.forEach(completePath => {
         files.push({
             name: path.basename(completePath),
-            content: path.relative(projectPath, completePath)
+            content: completePath
         });
     });
-
-    // Sort the files alphabetically by name
     files.sort((a, b) => a.name.localeCompare(b.name));
 
     return files;

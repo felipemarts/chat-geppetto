@@ -92,11 +92,7 @@ function generateHtmlTree(node) {
       html += `<li class="file-item">
     <input class="file-check" type="checkbox" data-filename="${value}"">
     <label class="file-name" data-filename="${value}">${value.split('/').pop().trim()}</label>
-  </li>`
-      /*html += `<li class="files-list-item">
-              <input type="checkbox" data-filename="${value}">
-              <span class="file-name" data-filename="${value}" style="cursor:pointer;">${value.split('/').pop().trim()}</span>
-          </li>`;*/
+  </li>`;
     } else {
       html += `<li>${key}${generateHtmlTree(value)}</li>`;
     }
@@ -126,11 +122,36 @@ async function registerFile(filePath) {
   updateChat(true);
 }
 
-function filesList(files) {
+function saveSelectedFilesState() {
+  const selectedFiles = getSelectedFiles();
+  localStorage.setItem('selectedFiles', JSON.stringify(selectedFiles));
+}
 
+function restoreSelectedFilesState() {
+  const selectedFiles = JSON.parse(localStorage.getItem('selectedFiles')) || [];
+  const checkboxes = document.querySelectorAll('#file-tree-panel input[type="checkbox"]');
+
+  checkboxes.forEach(checkbox => {
+    if (selectedFiles.includes(checkbox.getAttribute('data-filename'))) {
+      checkbox.checked = true;
+    } else {
+      checkbox.checked = false;
+    }
+  });
+}
+
+function addCheckboxEventListeners() {
+  const checkboxes = document.querySelectorAll('#file-tree-panel input[type="checkbox"]');
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', saveSelectedFilesState);
+  });
+}
+
+function filesList(files) {
   if (!files) {
     files = []
   }
+
   const fileTreePanel = document.getElementById('file-tree-panel');
   const treeStructure = buildFileTree(files);
   const fileTreeHTML = generateHtmlTree(treeStructure);
@@ -144,6 +165,11 @@ function filesList(files) {
       registerFile(filePath);
     });
   });
+
+  // Restaurar estado dos checkbox
+  restoreSelectedFilesState();
+  // Adicionar listeners
+  addCheckboxEventListeners();
 }
 
 // Function to get selected files
