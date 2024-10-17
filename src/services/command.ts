@@ -18,8 +18,6 @@ export const commandProcess = async (operation: FileOperation): Promise<void> =>
         await rename(operation);
     } else if (operation.command === "delete") {
         await deleteChat(operation);
-    } else if (operation.command === "projectFiles") {
-        await projectFiles(operation);
     } else {
         throw new Error(`Invalid command ${operation.command}`);
     }
@@ -37,17 +35,6 @@ const updateFile = async (operation: FileOperation) => {
     const content = lines.join('\n');
 
     helper.saveProjectFile(operation.id, filePath, content);
-}
-
-const projectFiles = async (operation: FileOperation) => {
-    const chatData = helper.getChat(operation.id);
-
-    if (!chatData.path) {
-        throw new Error("Project path not configured");
-    }
-
-    const markdownContent = generateFileList(chatData.path);
-    helper.saveProjectFile(operation.id, `.geppetto/structure.md`, markdownContent);
 }
 
 const clone = async (operation: FileOperation) => {

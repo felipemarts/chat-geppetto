@@ -1,7 +1,7 @@
 
 import { Message } from '../types';
 import helper from '../helper';
-import { populateFiles } from '../services/scanner';
+import { generateFileList, populateFiles } from '../services/scanner';
 
 export function saveHistory(req: any, res: any): any {
     const { chatId } = req.params;
@@ -19,6 +19,9 @@ export function getHistory(req: any, res: any): any {
     const chatData = helper.getChat(chatId);
 
     chatData.files = populateFiles(chatData.path);
+
+    const markdownContent = generateFileList(chatData.path);
+    helper.saveProjectFile(chatId, `.geppetto/structure.md`, markdownContent);
 
     return res.json(chatData);
 }
