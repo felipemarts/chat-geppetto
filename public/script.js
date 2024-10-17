@@ -35,12 +35,6 @@ async function deployCommand(deployButton, content) {
   }
 }
 
-function pathsProject() {
-  callCommand("projectFiles", currentChatId).then(() => {
-    window.location.reload();
-  });
-}
-
 function cloneChat() {
   const chatName = prompt('Enter chat name:');
   if (chatName) {
