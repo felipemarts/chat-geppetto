@@ -52,28 +52,6 @@ function isIgnored(item: string, ignoredPatterns: string[], dir: string): boolea
     });
 }
 
-// Recursively list all files and directories, considering ignore patterns
-function listFilesRecursively(dir: string, ignoredPatterns: string[]): string[] {
-    let results: string[] = [];
-    const items = fs.readdirSync(dir);
-
-    items.forEach(file => {
-        const filePath = path.join(dir, file);
-        const stat = fs.statSync(filePath);
-
-        // Check if file or directory is not ignored
-        if (!isIgnored(filePath, ignoredPatterns, dir)) {
-            if (stat.isDirectory()) {
-                results = results.concat(listFilesRecursively(filePath, ignoredPatterns));
-            } else {
-                results.push(filePath);
-            }
-        }
-    });
-
-    return results;
-}
-
 // Populate files with all non-ignored files from the project
 export function populateFiles(projectPath: string): Action[] {
     const files: Action[] = [];
