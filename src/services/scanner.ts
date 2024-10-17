@@ -31,12 +31,12 @@ function isIgnored(item: string, ignoredPatterns: string[], dir: string): boolea
     const relativePath = path.relative(dir, item);
     const itemName = path.basename(relativePath);
 
-    // Check if the item is the .geppetto directory
-    if (itemName === '.geppetto') {
+    // Check if the item is part of the .geppetto directory
+    if (relativePath.startsWith('.geppetto')) {
         return false; // Always include .geppetto
     }
 
-    // Implicitly ignore hidden files and directories
+    // Implicitly ignore hidden files and directories except for .geppetto
     if (itemName.startsWith('.')) {
         return true;
     }
