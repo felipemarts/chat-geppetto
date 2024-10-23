@@ -2,6 +2,41 @@
 // Global variables to manage chat state
 let currentChatId = localStorage.getItem('currentChatId');
 let chatData = localStorage.getItem('chatData') ? JSON.parse(localStorage.getItem('chatData')) : null;
+let editingMessageIndex = null;
+
+function openEditMessageModal(index, currentContent) {
+  editingMessageIndex = index;
+  const editMessageTextarea = document.getElementById('editMessageTextarea');
+  editMessageTextarea.value = currentContent;
+  const editMessageModal = new bootstrap.Modal(document.getElementById('editMessageModal'));
+  editMessageModal.show();
+}
+
+async function saveEditedMessage() {
+  const newContent = document.getElementById('editMessageTextarea').value;
+  if (editingMessageIndex !== null) {
+    chatData.history[editingMessageIndex].content = newContent;
+
+    try {
+      const response = await fetch(`/history/${currentChatId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ history: chatData.history })
+      });
+
+      await response.json();
+      updateChat(false);
+    } catch (error) {
+      console.error('Error communicating with server:', error);
+    }
+
+    editingMessageIndex = null;
+  }
+  const editMessageModal = bootstrap.Modal.getInstance(document.getElementById('editMessageModal'));
+  editMessageModal.hide();
+}
 
 
 async function deployCommand(deployButton, content) {
@@ -460,13 +495,11 @@ function displayMessage(index, message, role, roll = true) {
   const messageBubble = document.createElement('div');
   const messageContent = document.createElement('div');
 
-  // Assign classes based on message role
   messageWrapper.classList.add(role === 'user' ? 'user-message-wrapper' : 'bot-message-wrapper');
   messageBubble.classList.add(role === 'user' ? 'user-message' : 'bot-message');
 
   const messageHtml = marked.parse(message);
 
-  // Create Copy button
   const copyMessageButton = document.createElement('button');
   copyMessageButton.textContent = 'Copy';
   copyMessageButton.classList.add('btn', 'btn-sm', 'mt-2', 'chat-small-btn', 'btn-outline-light');
@@ -480,7 +513,6 @@ function displayMessage(index, message, role, roll = true) {
     });
   });
 
-  // Create Delete button
   const deleteButton = document.createElement('button');
   deleteButton.innerHTML = '<i class="bi bi-trash">Delete</i>';
   deleteButton.classList.add('btn', 'btn-sm', 'mt-2', 'btn-danger', 'chat-small-btn', 'delete-btn');
@@ -491,9 +523,16 @@ function displayMessage(index, message, role, roll = true) {
     messageWrapper.remove();
   };
 
+  const editButton = document.createElement('button');
+  editButton.innerHTML = '<i class="bi bi-pencil">Edit</i>';
+  editButton.classList.add('btn', 'btn-sm', 'mt-2', 'btn-warning', 'chat-small-btn', 'edit-btn');
+  editButton.style.float = 'right';
+  editButton.onclick = () => openEditMessageModal(index, message);
+
   messageContent.innerHTML = `<div class="user-message-mark">${messageHtml}</div>`;
   messageBubble.appendChild(messageContent);
   messageBubble.appendChild(deleteButton);
+  messageBubble.appendChild(editButton);  // Add the edit button here
   messageBubble.appendChild(copyMessageButton);
   messageWrapper.appendChild(messageBubble);
   chatMessages.appendChild(messageWrapper);

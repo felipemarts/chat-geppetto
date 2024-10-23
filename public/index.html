@@ -37,7 +37,8 @@
                 </div>
                 <hr />
                 <div class="btn-group-vertical w-100" role="group" aria-label="Button Bar">
-                    <button class="btn btn-outline-light" id="handleCreateChat" onclick="handleCreateChat()">New Chat</button>
+                    <button class="btn btn-outline-light" id="handleCreateChat" onclick="handleCreateChat()">New
+                        Chat</button>
                     <button class="btn btn-outline-light" id="cloneChat" onclick="cloneChat()">Clone Chat</button>
                     <button class="btn btn-outline-light" id="renameChat" onclick="renameChat()">Rename Chat</button>
                 </div>
@@ -69,6 +70,25 @@
                 <div id="file-tree-panel" class="btn-group-vertical w-100 mb-3 list-group" role="group"
                     aria-label="File List">
                     <!-- Files will be displayed here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editMessageModal" tabindex="-1" aria-labelledby="editMessageModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editMessageModalLabel">Edit Message</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <textarea id="editMessageTextarea" class="form-control" rows="20"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveEditedMessage()">Save changes</button>
                 </div>
             </div>
         </div>

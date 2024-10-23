@@ -299,3 +299,33 @@ html, body {
   background-color: red;
   color: white; /* Para garantir que o texto fique legível */
 }
+
+.modal-content {
+  background-color: #2e3032;
+  color: #f3f4f6;
+  border: none;
+}
+
+.modal-header, .modal-footer {
+  border-color: #343a40; /* Deixar a cor da borda escura para header e footer */
+}
+
+.btn-close {
+  filter: invert(1); /* Inverter a cor do ícone de fechar para um tema escuro */
+}
+
+.form-control {
+  background-color: #1a2243;
+  color: #f3f4f6;
+  border: none;
+}
+
+.btn-primary, .btn-secondary {
+  background-color: #343a40;
+  border: none;
+  color: #f3f4f6;
+}
+
+.btn-primary:hover, .btn-secondary:hover {
+  background-color: #495057; /* Cor de fundo mais clara quando o botão é mantido por hover */
+}
