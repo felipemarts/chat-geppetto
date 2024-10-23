@@ -25,23 +25,21 @@
         <div class="row flex-grow-1 h-100">
 
             <!-- Left Sidebar -->
-            <div class="col-2 h-100 pt-3">
+            <div class="col-2 pt-3 chats-conteiner">
                 <h5 class="text-light mb-2">Chats</h5>
                 <div id="chat-btn-list" class="btn-group-vertical w-100 mb-3" role="group" aria-label="Chat List">
                     <!-- User chats will be displayed here -->
                 </div>
                 <hr />
                 <div class="btn-group-vertical w-100" role="group" aria-label="Button Bar">
-                    <button class="btn btn-outline-light" id="resumeProject" onclick="resumeProject()">Resume Project</button>
-                    <button class="btn btn-outline-light" id="registerAlls" onclick="registerAll()">Register All</button>
-                    <button class="btn btn-outline-light" id="handleCreateChat" onclick="handleCreateChat()">New Chat</button>
-                    <button class="btn btn-outline-light" id="cloneChat" onclick="cloneChat()">Clone Chat</button>
-                    <button class="btn btn-outline-light" id="renameChat" onclick="renameChat()">Rename Chat</button>
+                    <button class="btn btn-outline-light" id="clearAll" onclick="clearAll()">Clear</button>
+                    <button class="btn btn-outline-light" id="deleteChat" onclick="deleteChat()">Delete</button>
                 </div>
                 <hr />
                 <div class="btn-group-vertical w-100" role="group" aria-label="Button Bar">
-                    <button class="btn btn-outline-light" id="clearAll" onclick="clearAll()">Clear</button>
-                    <button class="btn btn-outline-light" id="deleteChat" onclick="deleteChat()">Delete</button>
+                    <button class="btn btn-outline-light" id="handleCreateChat" onclick="handleCreateChat()">New Chat</button>
+                    <button class="btn btn-outline-light" id="cloneChat" onclick="cloneChat()">Clone Chat</button>
+                    <button class="btn btn-outline-light" id="renameChat" onclick="renameChat()">Rename Chat</button>
                 </div>
             </div>
 

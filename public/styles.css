@@ -245,6 +245,13 @@ html, body {
   opacity: 0.8;
 }
 
+.chats-conteiner {
+  padding: 10px;
+  border-radius: 5px;
+  max-height: 100vh;
+  overflow-y: auto;
+}
+
 .files-container {
   padding: 10px;
   border-radius: 5px;

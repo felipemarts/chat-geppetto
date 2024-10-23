@@ -122,7 +122,7 @@ function saveSelectedFilesState() {
 }
 
 function restoreSelectedFilesState() {
-  const selectedFiles = JSON.parse(localStorage.getItem('selectedFiles')) || [];
+  const selectedFiles = JSON.parse(localStorage.getItem('selectedFiles')) || [".geppetto/structure.md"];
   const checkboxes = document.querySelectorAll('#file-tree-panel input[type="checkbox"]');
 
   checkboxes.forEach(checkbox => {
@@ -233,6 +233,8 @@ async function loadChatList() {
     }
     chatItem.style.cursor = 'pointer';
     chatItem.onclick = () => {
+      localStorage.removeItem('selectedFiles');
+
       loadMessages(chat.id);
 
       const chatButtons = document.querySelectorAll('#chat-btn-list button');
@@ -554,8 +556,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     checkScrollPosition(chatMessages, scrollToBottomButton);
 
+    const chatInput = document.getElementById('chat-input');
+    
+    // Adiciona o evento de input para auto-expandir a text area
+    chatInput.addEventListener('input', autoExpandTextarea);
+
     // Send message on Enter key press
-    document.getElementById('chat-input').addEventListener('keydown', function (event) {
+    chatInput.addEventListener('keydown', function (event) {
       autoExpandTextarea();
       if (event.key === 'Enter' && !event.shiftKey) {
         event.preventDefault();
@@ -564,4 +571,5 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   };
 });
+
 
