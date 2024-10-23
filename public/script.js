@@ -99,7 +99,7 @@ function buildFileTree(files) {
   const tree = {};
 
   files.forEach(file => {
-    const pathParts = file.content.split('/');
+    const pathParts = file.content.split(/[\/\\]/);
     let current = tree;
 
     pathParts.forEach((part, index) => {
