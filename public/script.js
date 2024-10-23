@@ -113,21 +113,44 @@ function buildFileTree(files) {
   return tree;
 }
 
-function generateHtmlTree(node) {
+function generateHtmlTree(node, isNested = false) {
   let html = '<ul class="files-list">';
   for (const key in node) {
     const value = node[key];
     if (typeof value === 'string') {
       html += `<li class="file-item">
-    <input class="file-check" type="checkbox" data-filename="${value}"">
-    <label class="file-name" data-filename="${value}">${value.split('/').pop().trim()}</label>
-  </li>`;
+        <input class="file-check" type="checkbox" data-filename="${value}"">
+        <label class="file-name" data-filename="${value}">${value.split('/').pop().trim()}</label>
+      </li>`;
     } else {
-      html += `<li>${key}${generateHtmlTree(value)}</li>`;
+      html += `<li class="directory-item">
+        <span class="directory-toggle collapsed" data-directory="${key}">${key}</span>
+        <div class="directory-contents">
+          ${generateHtmlTree(value, true)}
+        </div>
+      </li>`;
     }
   }
   html += '</ul>';
   return html;
+}
+
+function addDirectoryToggleListeners() {
+  const toggles = document.querySelectorAll('.directory-toggle');
+  toggles.forEach(toggle => {
+    toggle.addEventListener('click', function() {
+      const contents = this.nextElementSibling;
+      if (contents.style.display === "none" || contents.style.display === "") {
+        contents.style.display = "block";
+        this.classList.remove('collapsed');
+        this.classList.add('expanded');
+      } else {
+        contents.style.display = "none";
+        this.classList.remove('expanded');
+        this.classList.add('collapsed');
+      }
+    });
+  });
 }
 
 async function registerFile(filePath) {
@@ -199,6 +222,9 @@ function filesList(files) {
   restoreSelectedFilesState();
   // Adicionar listeners
   addCheckboxEventListeners();
+
+  addDirectoryToggleListeners();
+
 }
 
 // Function to get selected files

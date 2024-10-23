@@ -252,6 +252,16 @@ html, body {
   overflow-y: auto;
 }
 
+.files-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.file-item,
+.directory-item {
+  list-style-type: none;
+}
+
 .files-container {
   padding: 10px;
   border-radius: 5px;
@@ -328,4 +338,23 @@ html, body {
 
 .btn-primary:hover, .btn-secondary:hover {
   background-color: #495057; /* Cor de fundo mais clara quando o botão é mantido por hover */
+}
+
+.directory-toggle {
+  cursor: pointer;
+  font-weight: bold;
+  color: #f3f4f6; /* Cor para indicar que é interativo */
+}
+
+.directory-toggle.collapsed:before {
+  content: "▶ "; /* Indicador para item colapsado */;
+}
+
+.directory-toggle.expanded:before {
+  content: "▼ "; /* Indicador para item expandido */;
+}
+
+.directory-contents {
+  display: none;
+  margin-left: 20px; /* Indentação para os sub-itens */;
 }
