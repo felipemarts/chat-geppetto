@@ -10,8 +10,10 @@ interface FileOperation {
 }
 
 export const commandProcess = async (operation: FileOperation): Promise<void> => {
-    if (operation.command === "deploy") {
+    if (operation.command === "write") {
         await updateFile(operation);
+    } else if (operation.command === "rm") {
+        await deleteFile(operation);
     } else if (operation.command === "clone") {
         await clone(operation);
     } else if (operation.command === "rename") {
@@ -22,6 +24,18 @@ export const commandProcess = async (operation: FileOperation): Promise<void> =>
         throw new Error(`Invalid command ${operation.command}`);
     }
 };
+
+const deleteFile = async (operation: FileOperation) => {
+    const lines = operation.content.split('\n');
+    const firstLine = lines[0];
+
+    if (!/\/\/.+\.\w+$/.test(firstLine)) {
+        throw new Error("Invalid format - Must start with '//'");
+    }
+    const filePath = firstLine.substring(2).trim();
+
+    helper.deleteProjectFile(operation.id, filePath);
+}
 
 const updateFile = async (operation: FileOperation) => {
     const lines = operation.content.split('\n');

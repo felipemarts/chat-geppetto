@@ -84,12 +84,26 @@ function saveProjectFile(chatId: string, filePath: string, content: string): voi
     fs.writeFileSync(absoluteFilePath, content, 'utf8');
 }
 
+function deleteProjectFile(chatId: string, filePath: string): void {
+    const chatData = getChat(chatId);
+
+    const absoluteFilePath = path.join(chatData.path, filePath);
+    const dirName = path.dirname(absoluteFilePath);
+
+    if (!fs.existsSync(dirName)) {
+        fs.mkdirSync(dirName, { recursive: true });
+    }
+
+    fs.rmSync(absoluteFilePath);
+}
+
 const helper = {
     getChatDir,
     getChat,
     saveChat,
     getProjectFile,
     saveProjectFile,
+    deleteProjectFile,
 };
 
 export default helper;

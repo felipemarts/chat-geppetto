@@ -57,13 +57,22 @@ async function deployCommand(deployButton, content) {
       sendMessage(true);
       userInput.value = currentText;
 
-    } else if(commandJson.cmd === "write") {
+    } else if (commandJson.cmd === "write" || commandJson.cmd === "rm") {
       const deployText = `//${commandJson.path}\n${commandJson.content}`;
 
-      callCommand("deploy", deployText).then(msg => {
+      callCommand(commandJson.cmd, deployText).then(async (msg) => {
         deployButton.textContent = msg;
-        setTimeout(() => { deployButton.textContent = 'Deploy'; }, 2000);
+
+        const response = await fetch(`/history/${currentChatId}`);
+        chatData = await response.json();
+        localStorage.setItem('chatData', JSON.stringify(chatData));
+        filesList(chatData.files); // update files
+        setTimeout(() => {
+          deployButton.textContent = 'Deploy';
+        }, 2000);
       });
+    } else {
+      alert(`Error: Ask for file commands`);
     }
   } catch (err) {
     alert(`Error: ${err.message}`);
@@ -138,7 +147,7 @@ function generateHtmlTree(node, isNested = false) {
 function addDirectoryToggleListeners() {
   const toggles = document.querySelectorAll('.directory-toggle');
   toggles.forEach(toggle => {
-    toggle.addEventListener('click', function() {
+    toggle.addEventListener('click', function () {
       const contents = this.nextElementSibling;
       if (contents.style.display === "none" || contents.style.display === "") {
         contents.style.display = "block";
@@ -622,7 +631,7 @@ document.addEventListener('DOMContentLoaded', function () {
     checkScrollPosition(chatMessages, scrollToBottomButton);
 
     const chatInput = document.getElementById('chat-input');
-    
+
     // Adiciona o evento de input para auto-expandir a text area
     chatInput.addEventListener('input', autoExpandTextarea);
 
