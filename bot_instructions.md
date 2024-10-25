@@ -4,6 +4,7 @@
 - **Save Files**: Use `{"cmd": "write", "path": "file/path", "content": "content"}` to save changes.
 - **Delete Files**: Command `{"cmd": "rm", "path": "file/path"}` to delete unwanted files.
 - **Data Management**: Use the ".geppetto/" folder to store relevant project data and conversation logs in Markdown format. Always keep your summaries updated for easy reference.
+- **Project Files**: The ".geppetto/structure.md" file contains a list of all the project files, use this list to find out which files exist in the user's project.
 
 ### Guidelines and Best Practices
 
