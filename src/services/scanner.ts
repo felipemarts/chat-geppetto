@@ -28,26 +28,29 @@ function getIgnoredPatterns(dir: string): string[] {
 
 // Determine if an item should be ignored based on ignored patterns
 function isIgnored(item: string, ignoredPatterns: string[], dir: string): boolean {
-    const relativePath = path.relative(dir, item);
+    const relativePath = path.relative(dir, item).replace(/\\/g, '/');
     const itemName = path.basename(relativePath);
 
     // Check if the item is part of the .geppetto directory
     if (relativePath.startsWith('.geppetto')) {
-        return false; // Always include .geppetto
+        return false;
     }
 
-    // Implicitly ignore hidden files and directories except for .geppetto
+    // Implicitly ignore hidden files and directories except .geppetto
     if (itemName.startsWith('.')) {
         return true;
     }
 
     // Match item against ignore patterns
     return ignoredPatterns.some(pattern => {
-        pattern = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // Escape regex special characters
-        const regexPattern = pattern
-            .replace(/\\\*/g, '.*')         // Convert glob * to regex
-            .replace(/\/$/, '(\\/.*)?$');  // Handle trailing slash in directory patterns
+        // Convert pattern and path to a uniform format
+        const normalizedPattern = pattern.replace(/\\/g, '/');
+        const regexPattern = normalizedPattern
+            .replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // Escape regex special characters
+            .replace(/\\\*/g, '.*')               // Convert glob * to regex
+            .replace(/\/$/, '(\\/.*)?$');         // Handle trailing slash in directory patterns
         const regex = new RegExp(`^${regexPattern}`);
+
         return regex.test(relativePath);
     });
 }
