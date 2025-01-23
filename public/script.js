@@ -189,7 +189,7 @@ function saveSelectedFilesState() {
 }
 
 function restoreSelectedFilesState() {
-  const selectedFiles = JSON.parse(localStorage.getItem('selectedFiles')) || [".geppetto/structure.md"];
+  const selectedFiles = JSON.parse(localStorage.getItem('selectedFiles')) || [];
   const checkboxes = document.querySelectorAll('#file-tree-panel input[type="checkbox"]');
 
   checkboxes.forEach(checkbox => {
