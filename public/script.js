@@ -420,48 +420,58 @@ async function registerAll() {
   }
 }
 
-// Function to send a new message
 async function sendMessage(shouldSend) {
   const userInput = document.getElementById('chat-input');
+  const sendMessageButton = document.getElementById('sendMessageButtonFalse');
   const message = userInput.value;
-  if (!currentChatId) return;
+
+  if (!currentChatId || !message.trim()) return; // Ensure message is not empty
+
+  // Display sending state
+  sendMessageButton.disabled = true;
+  sendMessageButton.textContent = 'Sending...';
 
   displayMessage(chatData.history.length, message, 'user');
   chatData.history.push({
-    role: 'user',
-    content: message
+      role: 'user',
+      content: message
   });
+
   userInput.value = '';
   autoExpandTextarea();
 
   const files = getSelectedFiles();
 
   try {
-    const response = await fetch(`/post_msg/${currentChatId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ message, shouldSend, files })
-    });
-
-    const data = await response.json();
-    const botResponse = data.botResponse;
-
-    if (botResponse) {
-      displayMessage(chatData.history.length, botResponse, 'assistant');
-      chatData.history.push({
-        role: 'assistant',
-        content: botResponse
+      const response = await fetch(`/post_msg/${currentChatId}`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ message, shouldSend, files })
       });
-    }
+
+      const data = await response.json();
+      const botResponse = data.botResponse;
+
+      if (botResponse) {
+          displayMessage(chatData.history.length, botResponse, 'assistant');
+          chatData.history.push({
+              role: 'assistant',
+              content: botResponse
+          });
+      }
   } catch (error) {
-    console.error('Error sending message:', error);
-    displayMessage(chatData.history.length, 'Error communicating with server.', 'assistant');
-    chatData.history.push({
-      role: 'assistant',
-      content: 'Error communicating with server.'
-    });
+      console.error('Error sending message:', error);
+      displayMessage(chatData.history.length, 'Error communicating with server.', 'assistant');
+      chatData.history.push({
+          role: 'assistant',
+          content: 'Error communicating with server.'
+      });
+  } finally {
+      // Restore button state
+      sendMessageButton.disabled = false;
+      sendMessageButton.textContent = 'Send';
   }
 }
 
