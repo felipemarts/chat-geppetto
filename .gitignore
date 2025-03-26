@@ -3,6 +3,7 @@ package-lock.json
 chats
 temp
 model.md
+public/download/*
 
 .env
 .geppetto/

@@ -10,6 +10,7 @@ import createChatRoutes from './routes/createChat';
 import historyRoutes from './routes/history';
 import postMessageRoutes from './routes/postMessage';
 import postCommandRoutes from './routes/postCommand';
+import screenshotRoutes from './routes/screenshot';
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use(createChatRoutes);
 app.use(historyRoutes);
 app.use(postMessageRoutes);
 app.use(postCommandRoutes);
+app.use(screenshotRoutes);
 
 // Start the server on the specified port
 app.listen(port, () => {
